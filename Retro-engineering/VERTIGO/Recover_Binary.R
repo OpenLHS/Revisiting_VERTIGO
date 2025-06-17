@@ -34,7 +34,7 @@ generate_binary_matrix_msb_first <- function(p) {
 lambda <- read.csv("Outputs/Coord/lambda.csv")[,1]
 y <- read.csv("Outputs/Coord/y.csv")
 alpha_hat <- read.csv("Outputs/Coord/alpha_hat.csv")[,1]
-beta_1_hat <- read.csv("Outputs/Coord/beta_node_1.csv")[,1]
+beta_1_hat <- as.matrix(read.csv("Outputs/Coord/beta_node_1.csv"))
 K1 <- as.matrix(read.csv("Outputs/Coord/K1.csv"))
 
 # CC can know p_k the size of beta_k_hat
@@ -49,11 +49,11 @@ Potential_rows <- generate_binary_matrix_msb_first(p1)
 
 # Compute all possible values of xi*beta_1_hat, where xi is an individual with
 # binary features
-U <- Potential_rows %*% beta_1_hat
+U <- Potential_rows %*% t(beta_1_hat)
 
 # verify if the cardinality of U = 2^p; if not, this technique won't necessarily 
 # allow to recover X^(1)
-if(!(length(U) == 2^p1)){
+if(!(length(unique(U)) == 2^p1)){
   print(paste0("The cardinality of U is smaller than 2^p. It it not guaranteed that we can recover X." )) 
 }
 
@@ -76,7 +76,7 @@ X_recovered <- Potential_rows[index_identified,]
 # Compare recovered data with true data
 #-------------------------------------------------------------------------------
 # Load true data
-X1 <- as.matrix(read.csv("Outputs/Node1/Data_node_1.csv"))
+X1 <- as.matrix(read.csv("Outputs/Node1/X1.csv"))
 
 # Compare matrices
 all.equal(X_recovered, X1, check.attributes=FALSE)

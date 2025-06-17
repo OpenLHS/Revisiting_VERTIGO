@@ -20,9 +20,6 @@ rm(list=ls())
 #-------------------------------------------------------------------------------
 # Manual parameters for R implementation
 #-------------------------------------------------------------------------------
-# How many data nodes are there?
-nnodes = 3
-
 # Fix convergence parameter
 epsilon <- 1e-6
 
@@ -61,7 +58,6 @@ X3_scaled <- cbind(X3_scaled, rep(1, nrow(X3_scaled)))
 # Load shared response y
 # Note: It is expected that y_i \in {-1, 1}, not y_i \in {0, 1}.
 y <- read.csv("../../Data/Mixed_data/outcome_data.csv")[,1]
-table(y)
 
 # Fix parameter lambda
 lambda <- 0.0001
@@ -393,40 +389,25 @@ if(SaveCC){
 # 11. CC: build t[X, 1_n] V^lambda [X, 1n] by bloc and invert to obtain variance estimates
 #-------------------------------------------------------------------------------
 
-# Compute blocks used if we have at least 2 data nodes
+# Compute blocks used 
 Block_1_1 <- Block_Client1 %*% t(Block_Client1)
 Block_1_2 <- Block_Client1 %*% t(Block_Client2)
+Block_1_3 <- Block_Client1 %*% t(Block_Client3)
 Block_2_1 <- Block_Client2 %*% t(Block_Client1)
 Block_2_2 <- Block_Client2 %*% t(Block_Client2)
+Block_2_3 <- Block_Client2 %*% t(Block_Client3)
+Block_3_1 <- Block_Client3 %*% t(Block_Client1)
+Block_3_2 <- Block_Client3 %*% t(Block_Client2)
+Block_3_3 <- Block_Client3 %*% t(Block_Client3)
 
-if(nnodes==2){
-  # Combine blocks into rows
-  Row_1 <- cbind(Block_1_1, Block_1_2)
-  Row_2 <- cbind(Block_2_1, Block_2_2)
+# Combine blocks into rows
+Row_1 <- cbind(Block_1_1, Block_1_2, Block_1_3)
+Row_2 <- cbind(Block_2_1, Block_2_2, Block_2_3)
+Row_3 <- cbind(Block_3_1, Block_3_2, Block_3_3)
   
-  # Combine rows into matrix
-  XVX <- rbind(Row_1, Row_2)
-} else if(nnodes==3){
+# Combine rows into matrix
+XVX <- rbind(Row_1, Row_2, Row_3)
   
-  # Compute blocks used if we have at least 3 data nodes
-  Block_1_3 <- Block_Client1 %*% t(Block_Client3)
-  Block_2_3 <- Block_Client2 %*% t(Block_Client3)
-  Block_3_1 <- Block_Client3 %*% t(Block_Client1)
-  Block_3_2 <- Block_Client3 %*% t(Block_Client2)
-  Block_3_3 <- Block_Client3 %*% t(Block_Client3)
-  
-  # Combine blocks into rows
-  Row_1 <- cbind(Block_1_1, Block_1_2, Block_1_3)
-  Row_2 <- cbind(Block_2_1, Block_2_2, Block_2_3)
-  Row_3 <- cbind(Block_3_1, Block_3_2, Block_3_3)
-  
-  # Combine rows into matrix
-  XVX <- rbind(Row_1, Row_2, Row_3)
-  
-} else{
-  stop("Method currently only works with nnodes = 2 or nnodes = 3.")
-}
-
 # Inverse matrix XVX
 invXVX <- solve(XVX)
 

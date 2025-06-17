@@ -20,9 +20,6 @@ rm(list=ls())
 #-------------------------------------------------------------------------------
 # Manual parameters for R implementation
 #-------------------------------------------------------------------------------
-# How many data nodes are there?
-nnodes = 3
-
 # Fix convergence parameter
 epsilon <- 1e-5
 
@@ -56,7 +53,6 @@ X2 <- as.matrix(node_data2)
 # Load shared response y
 # Note: It is expected that y_i \in {-1, 1}, not y_i \in {0, 1}.
 y <- read.csv("../../Data/Binary_Continuous_Split_data/outcome_data.csv")[,1]
-table(y)
 
 # Fix parameter lambda
 lambda <- 0.0001

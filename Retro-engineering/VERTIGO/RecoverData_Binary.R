@@ -2,9 +2,12 @@
 
 # PROJECT: VERTIGO and VERTIGO-CI implementation
 # DOC:     Example illustrating the issue with binary covariates held at a single data node
-# BY:      FCL
-# DATE:    Mai 2025
+# BY:      FCL, JPM
+# DATE:    June 2025
 # UPDATE:  --  
+
+# License: https://creativecommons.org/licenses/by-nc-sa/4.0/
+# Copyright: GRIIS / Université de Sherbrooke
 
 ####################################################################################################################################################
 

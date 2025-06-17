@@ -46,9 +46,9 @@ SaveCC <- TRUE
 #-------------------------------------------------------------------------------
 
 # Load each node x^(k), k=1,..., K
-node_data1 <- read.csv("Data_node_1.csv")
-node_data2 <- read.csv("Data_node_2.csv")
-node_data3 <- read.csv("Data_node_3.csv")
+node_data1 <- read.csv("../../Data/Mixed_data/Data_node_1.csv")
+node_data2 <- read.csv("../../Data/Mixed_data/Data_node_2.csv")
+node_data3 <- read.csv("../../Data/Mixed_data/Data_node_3.csv")
 
 # Note: Predictor values should be scaled since we are doing a ridge regression
 X1_scaled <- scale(node_data1)
@@ -60,7 +60,7 @@ X3_scaled <- cbind(X3_scaled, rep(1, nrow(X3_scaled)))
 
 # Load shared response y
 # Note: It is expected that y_i \in {-1, 1}, not y_i \in {0, 1}.
-y <- read.csv("outcome_data.csv")[,1]
+y <- read.csv("../../Data/Mixed_data/outcome_data.csv")[,1]
 table(y)
 
 # Fix parameter lambda

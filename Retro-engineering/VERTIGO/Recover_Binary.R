@@ -1,7 +1,7 @@
 ###################################################################################################################################################
 
-# PROJECT: Logistic regression - impproved vertigo
-# DOC:     Example illustrating the issue with binary covariates
+# PROJECT: VERTIGO and VERTIGO-CI implementation
+# DOC:     Example illustrating the issue with binary covariates held at a single data node
 # BY:      FCL
 # DATE:    Mai 2025
 # UPDATE:  --  

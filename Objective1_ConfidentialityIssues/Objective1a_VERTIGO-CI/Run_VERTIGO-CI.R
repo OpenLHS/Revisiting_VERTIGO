@@ -415,9 +415,9 @@ invXVX <- solve(XVX)
 std.error <- sqrt(diag(invXVX))
 
 # Format and save output
-beta <- c(beta_node_1, beta_node_2, beta_node_3[-length(beta_node_3)], beta_0)
+beta <- c(beta_0, beta_node_1, beta_node_2, beta_node_3[-length(beta_node_3)])
 output <- cbind(beta, std.error)
-rownames(output) <- c(colnames(node_data1), colnames(node_data2), colnames(node_data3), "intercept")
+rownames(output) <- c("intercept", colnames(node_data1), colnames(node_data2), colnames(node_data3))
 write.csv(output, file = "VERTIGO_CI_output.csv", row.names = TRUE)
 
 if(SaveCC){

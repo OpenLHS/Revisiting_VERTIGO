@@ -31,11 +31,11 @@ generate_binary_matrix_msb_first <- function(p) {
 # Load data
 #-------------------------------------------------------------------------------
 # CC has access to:
-lambda <- read.csv("lambda.csv")[,1]
-y <- read.csv("outcome_data.csv")
-alpha_hat <- read.csv("alpha_hat.csv")[,1]
-beta_1_hat <- read.csv("beta_1_hat.csv")[,1]
-K_1 <- as.matrix(read.csv("K_1.csv"))
+lambda <- read.csv("Outputs/Coord/lambda.csv")[,1]
+y <- read.csv("Outputs/Coord/outcome_data.csv")
+alpha_hat <- read.csv("Outputs/Coord/alpha_hat.csv")[,1]
+beta_1_hat <- read.csv("Outputs/Coord/beta_1_hat.csv")[,1]
+K_1 <- as.matrix(read.csv("Outputs/Coord/K_1.csv"))
 
 # CC can know p_k the size of beta_k_hat
 p1 <- length(beta_1_hat)
@@ -76,7 +76,7 @@ X_recovered <- Potential_rows[index_identified,]
 # Compare recovered data with true data
 #-------------------------------------------------------------------------------
 # Load true data
-X_1 <- as.matrix(read.csv("Data_node_1.csv"))
+X1 <- as.matrix(read.csv("Outputs/Node1/Data_node_1.csv"))
 
 # Compare matrices
-all.equal(X_recovered, X_1, check.attributes=FALSE)
+all.equal(X_recovered, X1, check.attributes=FALSE)

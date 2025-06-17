@@ -1,7 +1,7 @@
 ###############################################################################################################################################################
 
 # PROJECT: VERTIGO and VERTIGO-CI implementation
-# DOC:     Example illustrating the quantities known at the CC and at the local data nodes
+# DOC:     Example illustrating the quantities known at the CC and at the local data nodes whilst running VERTIGO-CI
 # BY:      MPD, JPM
 # DATE:    June 2025
 # UPDATE:  --  
@@ -164,7 +164,7 @@ while(!converged){
   gradient_J <- e_s + log( alpha_s/(1-alpha_s) )
   
   #-----------------------------------------------------------------------------
-  # c. CC: Compute the hessian matrix H(alpha_s) # (!) Possibility to add + C*I_n to hesssian 
+  # c. CC: Compute the hessian matrix H(alpha_s) 
   #-----------------------------------------------------------------------------
   Hessian <- 1/lambda * diag(y) %*% K_all %*% diag(y) + diag( 1/(alpha_s[,1]*(1-alpha_s[,1])) )
   
@@ -251,7 +251,6 @@ if(SaveNodes){
   
   # Node 3
   write.csv(alpha_hat, file = "Outputs/Node3/alpha_hat.csv", row.names = FALSE)
-  
 }
 
 if(SaveCC){
@@ -316,7 +315,7 @@ if(SaveCC){
   }
 
   #-----------------------------------------------------------------------------
-  # b. Last node: Compute exp{beta_0_hat}exp{t(X^(K))\beta_hat^(K)}, send to node 1 (!) Erreur dans l'article? Notation grand K vs petit k?
+  # b. Last node: Compute exp{beta_0_hat}exp{t(X^(K))\beta_hat^(K)}, send to node 1
   #-----------------------------------------------------------------------------
   exp_client3 <- exp(X3_scaled%*%t(beta_node_3)) #(!) d'après moi ici on ne devrait pas avoir le exp(beta_0)?
   

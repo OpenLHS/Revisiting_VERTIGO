@@ -32,10 +32,10 @@ generate_binary_matrix_msb_first <- function(p) {
 #-------------------------------------------------------------------------------
 # CC has access to:
 lambda <- read.csv("Outputs/Coord/lambda.csv")[,1]
-y <- read.csv("Outputs/Coord/outcome_data.csv")
+y <- read.csv("Outputs/Coord/y.csv")
 alpha_hat <- read.csv("Outputs/Coord/alpha_hat.csv")[,1]
-beta_1_hat <- read.csv("Outputs/Coord/beta_1_hat.csv")[,1]
-K_1 <- as.matrix(read.csv("Outputs/Coord/K_1.csv"))
+beta_1_hat <- read.csv("Outputs/Coord/beta_node_1.csv")[,1]
+K1 <- as.matrix(read.csv("Outputs/Coord/K1.csv"))
 
 # CC can know p_k the size of beta_k_hat
 p1 <- length(beta_1_hat)
@@ -58,7 +58,7 @@ if(!(length(U) == 2^p1)){
 }
 
 # Compute the values of X_1*beta_1_hat, using formula 22 (and multiplying by X on the LHS)
-XB <- 1/(lambda) * K_1 %*% as.matrix((y*alpha_hat))
+XB <- 1/(lambda) * K1 %*% as.matrix((y*alpha_hat))
 
 ## rounding both U and XB for comparisons
 Ur <- round(U,3)

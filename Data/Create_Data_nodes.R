@@ -1,7 +1,7 @@
 ###############################################################################################################################################################
 
 # PROJECT: VERTIGO and VERTIGO-CI implementation
-# DOC:     Example illustrating the quantities known at the CC and at the local data nodes
+# DOC:     Extracting nodes' data in .csv files
 # BY:      MPD, JPM
 # DATE:    June 2025
 # UPDATE:  --  

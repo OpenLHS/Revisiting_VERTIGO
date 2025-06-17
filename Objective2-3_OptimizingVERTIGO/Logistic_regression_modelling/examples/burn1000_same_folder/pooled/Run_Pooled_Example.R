@@ -26,7 +26,7 @@ setwd("../../example_handler")
 source("PoolingOrg_code_log-regV_ex.R")
 
 # Run pooled code
-vert_logistic_regression_nonpenalized_example_pooled_handler(man_nnodes = K, man_lambda = lambda, expath = examplefilepath)
+vert_logistic_regression_nonpenalized_example_pooled_handler(man_nnodes = K, man_lambda = lambda, expath = examplefilepath, save_to_csv = TRUE)
 
 ## Remove all environment variables. 
 ## If you want to see the variable that were create, simply don't execute that line (and clear them manually after)

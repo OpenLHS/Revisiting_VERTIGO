@@ -10,7 +10,7 @@
 # Loading packages and setting up core variables --------------------------
 library(glmnet)
 
-vert_logistic_regression_nonpenalized_example_pooled_handler <- function(man_wd=-1, man_nnodes=-1, man_lambda=-1, expath=""){
+vert_logistic_regression_nonpenalized_example_pooled_handler <- function(man_wd=-1, man_nnodes=-1, man_lambda=-1, expath="", save_to_csv=FALSE){
  
   manualwd <- man_wd
   K <- man_nnodes
@@ -77,8 +77,14 @@ vert_logistic_regression_nonpenalized_example_pooled_handler <- function(man_wd=
   # Pooled model
   glmnet_model <- glmnet(pooled_data, (y+1)/2, family=binomial, lambda=lambda, alpha=0, standardize=FALSE)
   
-  # Printing pooled models
-  print(coef(glmnet_model)[,1])
+  if(save_to_csv){
+    # Save output for comparison
+    write.csv(coef(glmnet_model)[,1], file = paste0(examplefilepath, "Pooled_Results_log_regV.csv"))
+  } else{
+    # Printing pooled models
+    print(coef(glmnet_model)[,1])  
+  }
+  
   
   ## Remove all environment variables. 
   ## If you want to see the variable that were create, simply don't execute that line (and clear them manually after)

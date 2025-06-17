@@ -21,7 +21,7 @@ rm(list=ls())
 # Manual parameters for R implementation
 #-------------------------------------------------------------------------------
 # Fix convergence parameter
-epsilon <- 1e-6
+epsilon <- 1e-5
 
 # Should we save all the following quantities in a .csv file?
 # - Nodes:

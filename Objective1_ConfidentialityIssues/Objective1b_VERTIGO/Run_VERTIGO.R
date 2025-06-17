@@ -43,8 +43,8 @@ SaveCC <- TRUE
 #-------------------------------------------------------------------------------
 
 # Load each node x^(k), k=1,..., K
-node_data1 <- read.csv("Data/Binary_Continuous_Split_data/Data_node_1.csv")
-node_data2 <- read.csv("Data/Binary_Continuous_Split_data/Data_node_2.csv")
+node_data1 <- read.csv("Data/Data_node_1.csv")
+node_data2 <- read.csv("Data/Data_node_2.csv")
 
 # Save dataset to matrix
 X1 <- as.matrix(node_data1)
@@ -55,7 +55,7 @@ X2 <- cbind(X2, rep(1, nrow(X2)))
 
 # Load shared response y
 # Note: It is expected that y_i \in {-1, 1}, not y_i \in {0, 1}.
-y <- read.csv("Data/Binary_Continuous_Split_data/outcome_data.csv")[,1]
+y <- read.csv("Data/outcome_data.csv")[,1]
 
 # Fix parameter lambda
 lambda <- 0.0001

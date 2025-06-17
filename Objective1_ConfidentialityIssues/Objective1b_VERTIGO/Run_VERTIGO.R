@@ -50,6 +50,9 @@ node_data2 <- read.csv("Data/Binary_Continuous_Split_data/Data_node_2.csv")
 X1 <- as.matrix(node_data1)
 X2 <- as.matrix(node_data2)
 
+# Note: It is expected that the last data node will hold a column of 1s in order to estimate the intercept
+X2 <- cbind(X2, rep(1, nrow(X2)))
+
 # Load shared response y
 # Note: It is expected that y_i \in {-1, 1}, not y_i \in {0, 1}.
 y <- read.csv("Data/Binary_Continuous_Split_data/outcome_data.csv")[,1]
@@ -210,7 +213,7 @@ if(SaveAll){
 
 #==============================================================================================================================================================
 # End of "Algorithm 3: VERTIGO Original"
-# We follow with the some steps of "Algorithm 4: VERTIGO-CI Original" (required for the data nodes to get their parameter estimates)
+# We follow with some steps of "Algorithm 4: VERTIGO-CI Original" (required for the data nodes to get their parameter estimates)
 #==============================================================================================================================================================
 #-------------------------------------------------------------------------------
 # 5. CC: Send alpha_hat to nodes
@@ -220,8 +223,6 @@ if(SaveNodes){
   # Node 1
   write.csv(alpha_hat, file = "Outputs/Node1/alpha_hat.csv", row.names = FALSE)
   
-  # Node 2
-  write.csv(alpha_hat, file = "Outputs/Node2/alpha_hat.csv", row.names = FALSE)
 }
 
 if(SaveCC){
@@ -230,21 +231,16 @@ if(SaveCC){
 }
 
 #-------------------------------------------------------------------------------
-# 6. Nodes (all but last): Calculate beta_hat^(k) and send it to CC
+# 6. Node 1 (binary): Calculate beta_hat^(k) and send it to CC
 #-------------------------------------------------------------------------------
 beta_node_1 <- 1/lambda * t(alpha_hat) %*% diag(y) %*% X1 
-beta_node_2 <- 1/lambda * t(alpha_hat) %*% diag(y) %*% X2 
 
 if(SaveNodes){
   # Node 1
   write.csv(beta_node_1, file = "Outputs/Node1/beta_node_1.csv", row.names = FALSE)
-  
-  # Node 2
-  write.csv(beta_node_2, file = "Outputs/Node2/beta_node_2.csv", row.names = FALSE)
 }
 
 if(SaveCC){
   # CC
   write.csv(beta_node_1, file = "Outputs/Coord/beta_node_1.csv", row.names = FALSE)
-  write.csv(beta_node_2, file = "Outputs/Coord/beta_node_2.csv", row.names = FALSE)
 }

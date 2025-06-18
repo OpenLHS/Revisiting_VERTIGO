@@ -164,18 +164,18 @@ rownames(beta0_hat) <- "(intercept)"
   
 if(SaveCC){
   # CC
-  write.csv(beta0_hat, tilfile = "Outputs/Coord/beta0_hat.csv", row.names = FALSE)
+  write.csv(beta0_hat, file = "Outputs/Coord/beta0_hat.csv", row.names = FALSE)
 }
   
 if(SaveNodes){
   # Node 1
-  write.csv(beta0_hat, tilfile = "Outputs/Node1/beta0_hat.csv", row.names = FALSE)
+  write.csv(beta0_hat, file = "Outputs/Node1/beta0_hat.csv", row.names = FALSE)
   
   # Node 2
-  write.csv(beta0_hat, tilfile = "Outputs/Node2/beta0_hat.csv", row.names = FALSE)
+  write.csv(beta0_hat, file = "Outputs/Node2/beta0_hat.csv", row.names = FALSE)
   
   # Node 3
-  write.csv(beta0_hat, tilfile = "Outputs/Node3/beta0_hat.csv", row.names = FALSE)
+  write.csv(beta0_hat, file = "Outputs/Node3/beta0_hat.csv", row.names = FALSE)
 }
   
 #-------------------------------------------------------------------------------

@@ -30,16 +30,16 @@ library(tidyverse)    # For data manipulation
 # Transform factors to numeric variables
 df <- burn1000 %>% 
   select(-id) %>%
-  mutate(death = case_when(death=="Alive"~1,
-                           death=="Dead"~0)) %>% 
-  mutate(gender = case_when(gender=="Male"~0,
-                            gender=="Female"~1)) %>% 
-  mutate(race = case_when(race=="White"~0,
-                          race=="Non-White"~1)) %>% 
-  mutate(inh_inj = case_when(inh_inj=="Yes"~0,
-                             inh_inj=="No"~1)) %>% 
-  mutate(flame = case_when(flame=="Yes"~0,
-                           flame=="No"~1))
+  mutate(death = case_when(death=="Alive"~0,
+                           death=="Dead"~1)) %>% 
+  mutate(gender = case_when(gender=="Male"~1,
+                            gender=="Female"~0)) %>% 
+  mutate(race = case_when(race=="White"~1,
+                          race=="Non-White"~0)) %>% 
+  mutate(inh_inj = case_when(inh_inj=="Yes"~1,
+                             inh_inj=="No"~0)) %>% 
+  mutate(flame = case_when(flame=="Yes"~1,
+                           flame=="No"~0))
 
 # Save the outcome by itself
 # Note: It is expected that y_i \in {-1, 1}, not y_i \in {0, 1}.
@@ -50,15 +50,19 @@ y <- df %>%
 
 # Remove outcome from the dataset
 df <- df %>% 
-  select(-death) 
+  select(-death) %>% 
+  select(facility, age, tbsa, gender, race, inh_inj, flame)
 
 # Create data nodes
-df_bin <- df %>% 
-  select(gender, race, inh_inj, flame)
-df_cont <- df %>% 
-  select(facility, age, tbsa)
+datanode1 <- df %>% 
+  select(1)
+datanode2 <- df %>% 
+  select(2:5)
+datanode3 <- df %>% 
+  select(6:7)
 
 # Save to .csv
-write.csv(df_bin, file = "Data_node_1.csv", row.names = FALSE)
-write.csv(df_cont, file = "Data_node_2.csv", row.names = FALSE)
+write.csv(datanode1, file = "Data_node_1.csv", row.names = FALSE)
+write.csv(datanode2, file = "Data_node_2.csv", row.names = FALSE)
+write.csv(datanode3, file = "Data_node_3.csv", row.names = FALSE)
 write.csv(y, file = "outcome_data.csv", row.names = FALSE)

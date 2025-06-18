@@ -30,16 +30,16 @@ library(tidyverse)    # For data manipulation
 # Transform factors to numeric variables
 df <- burn1000 %>% 
   select(-id) %>%
-  mutate(death = case_when(death=="Alive"~1,
-                           death=="Dead"~0)) %>% 
-  mutate(gender = case_when(gender=="Male"~0,
-                            gender=="Female"~1)) %>% 
-  mutate(race = case_when(race=="White"~0,
-                          race=="Non-White"~1)) %>% 
-  mutate(inh_inj = case_when(inh_inj=="Yes"~0,
-                             inh_inj=="No"~1)) %>% 
-  mutate(flame = case_when(flame=="Yes"~0,
-                           flame=="No"~1))
+  mutate(death = case_when(death=="Alive"~0,
+                           death=="Dead"~1)) %>% 
+  mutate(gender = case_when(gender=="Male"~1,
+                            gender=="Female"~0)) %>% 
+  mutate(race = case_when(race=="White"~1,
+                          race=="Non-White"~0)) %>% 
+  mutate(inh_inj = case_when(inh_inj=="Yes"~1,
+                             inh_inj=="No"~0)) %>% 
+  mutate(flame = case_when(flame=="Yes"~1,
+                           flame=="No"~0))
 
 # Save the outcome by itself
 # Note: It is expected that y_i \in {-1, 1}, not y_i \in {0, 1}.

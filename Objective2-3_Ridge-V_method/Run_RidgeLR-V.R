@@ -26,11 +26,11 @@ library(CVXR)
 #-------------------------------------------------------------------------------
 # Should we save all quantities available at the local nodes?
 # If set to "TRUE", everything will be saved in "Outputs/Nodeek/"
-SaveNodes <- FALSE
+SaveNodes <- TRUE
 
 # Should we save all quantities available at the CC?
 # If set to "TRUE", everything will be saved in "Outputs/Coord/"
-SaveCC <- FALSE
+SaveCC <- TRUE
 
 #-------------------------------------------------------------------------------
 # Inputs
@@ -159,7 +159,9 @@ if(SaveCC){
 #-------------------------------------------------------------------------------
 # Compute beta_0_hat  
 beta0_hat <- 1/y[1] * (log(1/alpha_hat[1] - 1) - y[1] * 1/(lambda*n) * (K_all %*% diag(alpha_hat) %*% y)[1])
-
+beta0_hat <- as.matrix(beta0_hat)
+rownames(beta0_hat) <- "(intercept)"
+  
 if(SaveCC){
   # CC
   write.csv(beta0_hat, tilfile = "Outputs/Coord/beta0_hat.csv", row.names = FALSE)
@@ -214,3 +216,6 @@ if(SaveNodes){
   # Node 3
   write.csv(beta_node_3, file = "Outputs/Node3/beta_node_3.csv", row.names = FALSE)
 }
+
+# Print results to console
+rbind(beta0_hat, beta_node_1, beta_node_2, beta_node_3)

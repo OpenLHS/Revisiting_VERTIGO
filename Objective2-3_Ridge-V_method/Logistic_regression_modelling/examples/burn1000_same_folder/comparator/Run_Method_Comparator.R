@@ -43,7 +43,7 @@ Pooled_output <- read.csv("Pooled_Results_log_regV.csv")
 
 # Create a single df to compare results
 results <- as.data.frame(cbind(VERTIGO_CI_output$beta, RidgeV_combined_output$betak_hat, Pooled_output$x))
-colnames(results) <- c("VERTIGO-CI", "Ridge-V", "glmnet")
+colnames(results) <- c("VERTIGO", "Ridge-V", "glmnet")
 rownames(results) <- Pooled_output$X
 
 # Print results to console

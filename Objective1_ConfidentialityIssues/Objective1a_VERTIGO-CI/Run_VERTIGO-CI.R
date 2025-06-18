@@ -313,7 +313,7 @@ if(SaveCC){
   #-----------------------------------------------------------------------------
   # b. Last node: Compute exp{beta_0_hat}exp{t(X^(K))\beta_hat^(K)}, send to node 1
   #-----------------------------------------------------------------------------
-  exp_client3 <- exp(X3_scaled%*%t(beta_node_3)) #(!) d'après moi ici on ne devrait pas avoir le exp(beta_0)?
+  exp_client3 <- exp(X3_scaled%*%t(beta_node_3)) 
   
   if(SaveNodes){
     # Node 1

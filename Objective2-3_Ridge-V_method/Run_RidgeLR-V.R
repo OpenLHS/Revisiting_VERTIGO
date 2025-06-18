@@ -24,13 +24,6 @@ library(CVXR)
 #-------------------------------------------------------------------------------
 # Manual parameters for R implementation
 #-------------------------------------------------------------------------------
-# Should we save all the following quantities in a .csv file?
-# - Nodes:
-#     |> partial gradient
-# - CC: 
-#     |> alpha_s 
-SaveAll <- FALSE
-
 # Should we save all quantities available at the local nodes?
 # If set to "TRUE", everything will be saved in "Outputs/Nodeek/"
 SaveNodes <- FALSE
@@ -62,14 +55,19 @@ lambda <- 0.0001
 
 if(SaveNodes){
   # Node 1
-  write.csv(X1, file = "Outputs/Node1/X1.csv", row.names = FALSE)
+  write.csv(X1_scaled, file = "Outputs/Node1/X1_scaled.csv", row.names = FALSE)
   write.csv(y, file = "Outputs/Node1/y.csv", row.names = FALSE)
   write.csv(lambda, file = "Outputs/Node1/lambda.csv", row.names = FALSE)
   
   # Node 2
-  write.csv(X2, file = "Outputs/Node2/X2.csv", row.names = FALSE)
+  write.csv(X2_scaled, file = "Outputs/Node2/X2_scaled.csv", row.names = FALSE)
   write.csv(y, file = "Outputs/Node2/y.csv", row.names = FALSE)
   write.csv(lambda, file = "Outputs/Node2/lambda.csv", row.names = FALSE)
+  
+  # Node 3
+  write.csv(X3_scaled, file = "Outputs/Node3/X3_scaled.csv", row.names = FALSE)
+  write.csv(y, file = "Outputs/Node3/y.csv", row.names = FALSE)
+  write.csv(lambda, file = "Outputs/Node3/lambda.csv", row.names = FALSE)
   
 }
 
@@ -92,6 +90,9 @@ if(SaveNodes){
 
   # Node 2
   write.csv(K2, file = "Outputs/Node2/K2.csv", row.names = FALSE)
+  
+  # Node 3
+  write.csv(K3, file = "Outputs/Node3/K3.csv", row.names = FALSE)
 
 }
 
@@ -99,6 +100,7 @@ if(SaveCC){
   # CC
   write.csv(K1, file = "Outputs/Coord/K1.csv", row.names = FALSE)
   write.csv(K2, file = "Outputs/Coord/K2.csv", row.names = FALSE)
+  write.csv(K3, file = "Outputs/Coord/K3.csv", row.names = FALSE)
 }
 
 #-------------------------------------------------------------------------------
@@ -143,9 +145,9 @@ if(SaveCC){
 # 4. CC: Save optimal values alpha_hat
 #-------------------------------------------------------------------------------
 
-if(SaveAll){
-  # Save values of alpha_s for all recorded iterations
-  write.csv(alpha_list, file = "List_alpha_s.csv", row.names = FALSE)
+if(SaveCC){
+  # CC
+  write.csv(alpha_hat, file = "Outputs/Coord/alpha_hat.csv", row.names = FALSE)
 }
 
 #==============================================================================================================================================================
@@ -157,11 +159,37 @@ if(SaveAll){
 #-------------------------------------------------------------------------------
 # Compute beta_0_hat  
 beta0_hat <- 1/y[1] * (log(1/alpha_hat[1] - 1) - y[1] * 1/(lambda*n) * (K_all %*% diag(alpha_hat) %*% y)[1])
+
+if(SaveCC){
+  # CC
+  write.csv(beta0_hat, tilfile = "Outputs/Coord/beta0_hat.csv", row.names = FALSE)
+}
+  
+if(SaveNodes){
+  # Node 1
+  write.csv(beta0_hat, tilfile = "Outputs/Node1/beta0_hat.csv", row.names = FALSE)
+  
+  # Node 2
+  write.csv(beta0_hat, tilfile = "Outputs/Node2/beta0_hat.csv", row.names = FALSE)
+  
+  # Node 3
+  write.csv(beta0_hat, tilfile = "Outputs/Node3/beta0_hat.csv", row.names = FALSE)
+}
   
 #-------------------------------------------------------------------------------
 # 6. CC: Send alpha_hat to nodes
 #-------------------------------------------------------------------------------
-
+if(SaveNodes){
+  # Node 1
+  write.csv(alpha_hat, file = "Outputs/Node1/alpha_hat.csv", row.names = FALSE)
+  
+  # Node 2
+  write.csv(alpha_hat, file = "Outputs/Node2/alpha_hat.csv", row.names = FALSE)
+  
+  # Node 3
+  write.csv(alpha_hat, file = "Outputs/Node3/alpha_hat.csv", row.names = FALSE)
+}
+  
 #-------------------------------------------------------------------------------
 # 7. Nodes: Calculate beta_hat^(k) and send it to CC
 #-------------------------------------------------------------------------------
@@ -169,4 +197,20 @@ beta_node_1 <- 1/(lambda*n) * t(X1_scaled) %*% diag(alpha_hat) %*% y
 beta_node_2 <- 1/(lambda*n) * t(X2_scaled) %*% diag(alpha_hat) %*% y
 beta_node_3 <- 1/(lambda*n) * t(X3_scaled) %*% diag(alpha_hat) %*% y
 
-c(beta0_hat, beta_node_1, beta_node_2, beta_node_3)
+if(SaveCC){
+  # CC
+  write.csv(beta_node_1, file = "Outputs/Coord/beta_node_1.csv", row.names = FALSE)
+  write.csv(beta_node_2, file = "Outputs/Coord/beta_node_2.csv", row.names = FALSE)
+  write.csv(beta_node_3, file = "Outputs/Coord/beta_node_3.csv", row.names = FALSE)
+}
+
+if(SaveNodes){
+  # Node 1
+  write.csv(beta_node_1, file = "Outputs/Node1/beta_node_1.csv", row.names = FALSE)
+  
+  # Node 2
+  write.csv(beta_node_2, file = "Outputs/Node2/beta_node_2.csv", row.names = FALSE)
+  
+  # Node 3
+  write.csv(beta_node_3, file = "Outputs/Node3/beta_node_3.csv", row.names = FALSE)
+}

@@ -14,7 +14,7 @@
 rm(list=ls())
 
 #==============================================================================================================================================================
-# Try and recover the original data using all information saved at the CC (Method 2: Supplementary material)
+# Try and recover the original data using all information saved at the CC (Method 2: See Additional file 1)
 #==============================================================================================================================================================
 
 #-------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ Block_Client2 <- as.matrix(read.csv("Outputs/Coord/Block_Client2.csv"))
 Block_Client3 <- as.matrix(read.csv("Outputs/Coord/Block_Client3.csv"))
 
 #-------------------------------------------------------------------------------
-# Compute the matrix V using Supplemtary material D
+# Compute the matrix V using Appendix E
 #-------------------------------------------------------------------------------
 # Compute V^lambda
 V <- diag( as.vector(alpha_hat*(1-alpha_hat)) )
@@ -61,5 +61,5 @@ all.equal(recoveredX2, X2_scaled, check.attributes = FALSE)
 all.equal(recoveredX3, X3_scaled, check.attributes = FALSE)
 
 #==============================================================================================================================================================
-# End of "Recovering the original data at the CC (Method 2: Supplementary metarial)"
+# End of "Recovering the original data at the CC (Method 2: See Additional file 1)"
 #==============================================================================================================================================================

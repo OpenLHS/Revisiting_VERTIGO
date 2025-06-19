@@ -151,7 +151,7 @@ while(!converged){
   e_3_list <- cbind(e_3_list, e_3)
   
   #-----------------------------------------------------------------------------
-  # b. CC: Calculate e_s = sum e^(k)(alpha_s) and the gradient of J^lambda(alpha_s)
+  # b. CC: Calculate e_s = sum e^(k)(alpha_s) and the gradient of J^lambda(alpha_s), using Equation 10
   #-----------------------------------------------------------------------------
   # Compute the sum of e^(k)(alpha_s)
   e_s <- e_1 + e_2 + e_3

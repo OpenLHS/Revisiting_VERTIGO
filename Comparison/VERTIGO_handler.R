@@ -73,6 +73,9 @@ VERTIGO_handler <- function(lambda = -1, epsilon = 1e-5){
     stop("The algorithm cannot run because the penalty parameter lambda was set lower or equal to 0.")
   }
   
+  # Make sure the lambda we use for VERTIGO is equivalent to the one used in glmnet/RidgeLR-V
+  lambda <- lambda*n
+  
   if(SaveNodes){
     # Node 1
     write.csv(X1_scaled, file = "Outputs/Node1/X1_scaled.csv", row.names = FALSE)
@@ -300,142 +303,10 @@ VERTIGO_handler <- function(lambda = -1, epsilon = 1e-5){
     write.csv(beta_0, file = "Outputs/Coord/beta_0.csv", row.names = FALSE)
   }
   
-  #-------------------------------------------------------------------------------
-  # 8. Client-to-client communication
-  #-------------------------------------------------------------------------------
-  #-----------------------------------------------------------------------------
-  # a. Nodes (all but last): Compute exp{t(X^(k))\beta_hat^(k)}, send to node 1
-  #-----------------------------------------------------------------------------
-  exp_client1 <- exp(X1_scaled%*%t(beta_node_1))
-  exp_client2 <- exp(X2_scaled%*%t(beta_node_2))
-  
-  if(SaveNodes){
-    # Node 1
-    write.csv(exp_client1, file = "Outputs/Node1/exp_client1.csv", row.names = FALSE)
-    write.csv(exp_client2, file = "Outputs/Node1/exp_client2.csv", row.names = FALSE)
-    
-    # Node 2
-    write.csv(exp_client2, file = "Outputs/Node2/exp_client2.csv", row.names = FALSE)
-  }
-  
-  #-----------------------------------------------------------------------------
-  # b. Last node: Compute exp{beta_0_hat}exp{t(X^(K))\beta_hat^(K)}, send to node 1
-  #-----------------------------------------------------------------------------
-  exp_client3 <- exp(X3_scaled%*%t(beta_node_3)) 
-  
-  if(SaveNodes){
-    # Node 1
-    write.csv(exp_client3, file = "Outputs/Node1/exp_client3.csv", row.names = FALSE)
-    
-    # Node 3
-    write.csv(exp_client3, file = "Outputs/Node1/exp_client3.csv", row.names = FALSE)
-  }
-  
-  #-----------------------------------------------------------------------------
-  # c. Node 1: Combine the results to compute V^lambda, send to all nodes
-  #-----------------------------------------------------------------------------
-  # Combine all client quantities
-  exp_all <- exp_client1 * exp_client2 * exp_client3
-  
-  # Compute matrix V
-  V = (exp_all/(1+exp_all)) * (1-(exp_all/(1+exp_all)))
-  V = diag(V[,1])
-  
-  if(SaveNodes){
-    # Node 1
-    write.csv(V, file = "Outputs/Node1/V.csv", row.names = FALSE)
-    
-    # Node 2
-    write.csv(V, file = "Outputs/Node2/V.csv", row.names = FALSE)
-    
-    # Node 3
-    write.csv(V, file = "Outputs/Node3/V.csv", row.names = FALSE)
-  }
-  
-  
-  #-------------------------------------------------------------------------------
-  # 9. Nodes (all but last): Calculate t(X^(k)) (V^lambda)^(1/2), send to CC.
-  #-------------------------------------------------------------------------------
-  # Compute (V^lambda)^(1/2)
-  sqrtV <- sqrt(V)
-  
-  # Compute blocks
-  Block_Client1 <- t(X1_scaled) %*% sqrtV
-  Block_Client2 <- t(X2_scaled) %*% sqrtV
-  
-  if(SaveNodes){
-    # Node 1
-    write.csv(Block_Client1, file = "Outputs/Node1/Block_Client1.csv", row.names = FALSE)
-    
-    # Node 2
-    write.csv(Block_Client2, file = "Outputs/Node2/Block_Client2.csv", row.names = FALSE)
-  }
-  
-  if(SaveCC){
-    # CC
-    write.csv(Block_Client1, file = "Outputs/Coord/Block_Client1.csv", row.names = FALSE)
-    write.csv(Block_Client2, file = "Outputs/Coord/Block_Client2.csv", row.names = FALSE)
-  }
-  
-  #-------------------------------------------------------------------------------
-  # 10. Last node: Calculate t[X^(K), 1_n] (V^lambda)^(1/2), send to CC.
-  # Note: X3_scaled = [scale(X3, 1_n)].
-  #-------------------------------------------------------------------------------
-  Block_Client3 <- t(X3_scaled) %*% sqrtV
-  
-  if(SaveNodes){
-    # Node 3
-    write.csv(Block_Client3, file = "Outputs/Node3/Block_Client3.csv", row.names = FALSE)
-  }
-  
-  if(SaveCC){
-    # CC
-    write.csv(Block_Client3, file = "Outputs/Coord/Block_Client3.csv", row.names = FALSE)
-  }
-  
-  #-------------------------------------------------------------------------------
-  # 11. CC: build t[X, 1_n] V^lambda [X, 1n] by bloc and invert to obtain variance estimates
-  #-------------------------------------------------------------------------------
-  
-  # Compute blocks used 
-  Block_1_1 <- Block_Client1 %*% t(Block_Client1)
-  Block_1_2 <- Block_Client1 %*% t(Block_Client2)
-  Block_1_3 <- Block_Client1 %*% t(Block_Client3)
-  Block_2_1 <- Block_Client2 %*% t(Block_Client1)
-  Block_2_2 <- Block_Client2 %*% t(Block_Client2)
-  Block_2_3 <- Block_Client2 %*% t(Block_Client3)
-  Block_3_1 <- Block_Client3 %*% t(Block_Client1)
-  Block_3_2 <- Block_Client3 %*% t(Block_Client2)
-  Block_3_3 <- Block_Client3 %*% t(Block_Client3)
-  
-  # Combine blocks into rows
-  Row_1 <- cbind(Block_1_1, Block_1_2, Block_1_3)
-  Row_2 <- cbind(Block_2_1, Block_2_2, Block_2_3)
-  Row_3 <- cbind(Block_3_1, Block_3_2, Block_3_3)
-  
-  # Combine rows into matrix
-  XVX <- rbind(Row_1, Row_2, Row_3)
-  
-  # Inverse matrix XVX
-  invXVX <- solve(XVX)
-  
-  # Compute standard errors from previous matrix
-  std.error <- sqrt(diag(invXVX))
-  
   # Format and save output
   beta <- c(beta_0, beta_node_1, beta_node_2, beta_node_3[-length(beta_node_3)])
-  output <- cbind(beta, std.error)
+  output <- cbind(beta)
   rownames(output) <- c("intercept", colnames(node_data1), colnames(node_data2), colnames(node_data3))
   write.csv(output, file = "VERTIGO_output.csv", row.names = TRUE)
   
-  if(SaveCC){
-    # CC
-    write.csv(XVX, file = "Outputs/Coord/XVX.csv", row.names = FALSE)
-    write.csv(invXVX, file = "Outputs/Coord/invXVX.csv", row.names = FALSE)
-    write.csv(beta, file = "Outputs/Coord/beta_hat.csv", row.names = FALSE)
-  }
-  
-  #==============================================================================================================================================================
-  # End of "Algorithm 4: VERTIGO-CI Original"
-  #==============================================================================================================================================================
 }

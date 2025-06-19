@@ -11,10 +11,10 @@
 
 ###############################################################################################################################################################
 
-RidgeLR_V_handler <- function(lambda = -1){
+RidgeLog_V_handler <- function(lambda = -1){
   
   #==============================================================================================================================================================
-  # Beginning of "Algorithm 2: RIDGE-V: RIDGE logistic regression from Vertically partitioned data with no penalty on the intercept"
+  # Beginning of "Algorithm 2: RidgeLog-V: RIDGE logistic regression from Vertically partitioned data with no penalty on the intercept"
   #==============================================================================================================================================================
   #-------------------------------------------------------------------------------
   # Load required libraries
@@ -229,5 +229,5 @@ RidgeLR_V_handler <- function(lambda = -1){
   }
   
   # Format and save output
-  write.csv(rbind(beta0_hat, beta_node_1, beta_node_2, beta_node_3), file = "RidgeLR-V_output.csv", row.names = FALSE)
+  write.csv(rbind(beta0_hat, beta_node_1, beta_node_2, beta_node_3), file = "RidgeLog-V_output.csv", row.names = FALSE)
 }

@@ -2,7 +2,7 @@
 
 This folder can be used to quickly compared the results of the following methods:
 - glmnet
-- RidgeLR-V
+- RidgeLog-V
 - VERTIGO
 
 ## Data

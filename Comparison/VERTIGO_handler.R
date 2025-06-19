@@ -178,13 +178,20 @@ VERTIGO_handler <- function(lambda = -1, epsilon = 1e-5){
     #-----------------------------------------------------------------------------
     # d. CC: Update alpha_s and send update to nodes
     #-----------------------------------------------------------------------------
-    # Update parameters alpha through NR step
-    alpha_new <- alpha_s - solve(Hessian, gradient_J)
+    # Initialize step size and step size boolean
+    step_success <- FALSE
+    step_size <- 2
     
-    # Note: As alpha_i \in (0, 1), we need to make sure that no values are out of bounds
-    alpha_new[which(alpha_new<0)] <- 0.000000001
-    alpha_new[which(alpha_new>1)] <- 0.999999999
-    
+    while(!step_success){
+      step_size <- step_size/2
+      
+      # Update parameters alpha through NR step
+      alpha_new <- alpha_s - step_size*solve(Hessian, gradient_J)
+      
+      # Note: As alpha_i \in (0, 1), we need to make sure that no values are out of bounds
+      step_success <- all(alpha_new > 0 & alpha_new < 1)
+    }
+      
     # Compare new alpha to current one. Did we converge?
     if(norm(alpha_new - alpha_s, type = "2")<epsilon){
       converged = TRUE
